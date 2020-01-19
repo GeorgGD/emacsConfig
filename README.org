@@ -1,0 +1,27 @@
+* My default settings for emacs
+Let's face it, emacs is a horrible editor out-of-the-box. Therefore I took 
+the time to put together a config file to quickly setup and run Emacs.
+
+** What you will need to download
+if you dont have any of these make sure to download them or company will
+not run as intended.
+- clang :: sudo apt install clang
+- cmake :: sudo apt install cmake
+- libclang-dev :: sudo apt install libclang 
+
+** Packages
+1. spaceline
+2. company
+3. irony
+4. org-mode 
+
+** Handy shortcuts
+To use the terminal inside emacs, use: *C-c s*. 
+#+BEGIN_SRC emacs-lisp
+  (global-set-key
+   (kbd "C-c s")
+   (lambda ()
+     (interactive)
+     (let ((current-prefix-arg '(4)))
+       (call-interactively #'shell))))
+#+END_SRC
