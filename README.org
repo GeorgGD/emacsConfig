@@ -14,6 +14,7 @@ not run as intended.
 2. company
 3. irony
 4. org-mode 
+5. spacemacs-theme
 
 ** Handy shortcuts
 To use the terminal inside emacs, use: *C-c s*. 
@@ -25,3 +26,7 @@ To use the terminal inside emacs, use: *C-c s*.
      (let ((current-prefix-arg '(4)))
        (call-interactively #'shell))))
 #+END_SRC
+** Minor features
+This config comes with balanced parentheses, brackets, braces and quotes.
+
+Constructive feedback are always welcome!
