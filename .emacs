@@ -22,6 +22,12 @@
    (let ((current-prefix-arg '(4)))
      (call-interactively #'shell))))
 
+;; Balanced parentheses
+(electric-pair-mode 1)  
+(setq electric-pair-pairs
+      '(
+        (?\" . ?\")
+        (?\{ . ?\})))
 
 ;; MELPA package archive
 (add-to-list 'package-archives
@@ -37,10 +43,10 @@
  '(custom-safe-themes
    (quote
     ("bd7b7c5df1174796deefce5debc2d976b264585d51852c962362be83932873d9" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
- '(org-support-shift-select (quote always))
+ '(org-support-shift-select (quote always) t)
  '(package-selected-packages
    (quote
-    (irony-eldoc company-irony irony yasnippet spacemacs-theme spaceline which-key use-package monokai-theme ivy haskell-mode evil-surround evil-magit evil-leader evil-escape company cider auctex))))
+    (autopair irony-eldoc company-irony irony yasnippet spacemacs-theme spaceline which-key use-package monokai-theme ivy haskell-mode evil-surround evil-magit evil-leader evil-escape company cider auctex))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
