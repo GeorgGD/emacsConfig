@@ -12,9 +12,10 @@ not run as intended.
 ** Packages
 1. spaceline
 2. company
-3. irony
-4. org-mode 
+3. company-irony
+4. irony
 5. spacemacs-theme
+6. use-package
 
 ** Handy shortcuts
 To use the terminal inside emacs, use: *C-c s*. 
