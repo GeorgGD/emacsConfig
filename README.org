@@ -7,7 +7,7 @@ if you dont have any of these make sure to download them or company will
 not run as intended.
 - clang :: sudo apt install clang
 - cmake :: sudo apt install cmake
-- libclang-dev :: sudo apt install libclang 
+- libclang-dev :: sudo apt install libclang-dev 
 
 ** Packages
 1. spaceline
