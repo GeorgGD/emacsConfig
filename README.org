@@ -16,6 +16,7 @@ not run as intended.
 4. irony
 5. spacemacs-theme
 6. use-package
+7. company-web
 
 ** Handy shortcuts
 To use the terminal inside emacs, use: *C-c s*. 
@@ -29,5 +30,7 @@ To use the terminal inside emacs, use: *C-c s*.
 #+END_SRC
 ** Minor features
 This config comes with balanced parentheses, brackets, braces and quotes.
+This comfig can also add closing tags when working with html files. Simply
+add *>* at the end of the starting tag and the closing tag will be generated.
 
 Constructive feedback are always welcome!

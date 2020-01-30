@@ -1,8 +1,3 @@
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
 (package-initialize)
 
 ;; Emacs essentials
@@ -29,11 +24,10 @@
         (?\" . ?\")
         (?\{ . ?\})))
 
-;; MELPA package archive
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://melpa.org/packages/"))
 
-;; Spacemaps color there and Spaceline-package
+;; MELPA package archive
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -42,11 +36,10 @@
  '(custom-enabled-themes (quote (spacemacs-dark)))
  '(custom-safe-themes
    (quote
-    ("bd7b7c5df1174796deefce5debc2d976b264585d51852c962362be83932873d9" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
- '(org-support-shift-select (quote always) t)
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
    (quote
-    (autopair irony-eldoc company-irony irony yasnippet spacemacs-theme spaceline which-key use-package monokai-theme ivy haskell-mode evil-surround evil-magit evil-leader evil-escape company cider auctex))))
+    (company-web company company-irony spacemacs-theme spaceline irony))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -57,6 +50,9 @@
 ;; Spaceline
 (require 'spaceline-config)
 (spaceline-spacemacs-theme)
+
+;; Org-mode
+(setq org-support-shift-select t)
 
 ;; Auto-complete with company
 ;; For company to work you need clang, cmake and libclang (good luck getting everything to work. xD)
@@ -85,6 +81,24 @@
   (add-hook 'c++-mode-hook 'company-mode)
   (add-hook 'c-mode-hook 'company-mode))
 
+;; Auto-complete for HTML with company
+(add-to-list 'company-backends 'company-web-html)
 
-;; Org-mode
-(setq org-support-shift-select t)
+(defun my-sgml-insert-gt ()
+  "Inserts a `>' character and calls 
+`my-sgml-close-tag-if-necessary', leaving point where it is."
+  (interactive)
+  (insert ">")
+  (save-excursion (my-sgml-close-tag-if-necessary)))
+
+(defun my-sgml-close-tag-if-necessary ()
+  "Calls sgml-close-tag if the tag immediately before point is
+an opening tag that is not followed by a matching closing tag."
+  (when (looking-back "<\\s-*\\([^</> \t\r\n]+\\)[^</>]*>")
+    (let ((tag (match-string 1)))
+      (unless (and (not (sgml-unclosed-tag-p tag))
+           (looking-at (concat "\\s-*<\\s-*/\\s-*" tag "\\s-*>")))
+    (sgml-close-tag)))))
+
+(eval-after-load "sgml-mode"
+  '(define-key sgml-mode-map ">" 'my-sgml-insert-gt))
