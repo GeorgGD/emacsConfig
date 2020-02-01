@@ -8,6 +8,7 @@
 (show-paren-mode 1)
 (setq show-paren-style 'mixed)
 (global-linum-mode t)
+;;------------------------------------------------------------------
 
 ;; Macro for running shell (C-c s)
 (global-set-key
@@ -15,7 +16,8 @@
  (lambda ()
    (interactive)
    (let ((current-prefix-arg '(4)))
-     (call-interactively #'shell))))
+     (call-interactively #'term))))
+;;------------------------------------------------------------------
 
 ;; Balanced parentheses
 (electric-pair-mode 1)  
@@ -23,11 +25,13 @@
       '(
         (?\" . ?\")
         (?\{ . ?\})))
+;;------------------------------------------------------------------
 
 
 ;; MELPA package archive
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 
+;; Spacemacs-dark theme
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -46,6 +50,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+;;------------------------------------------------------------------
 
 ;; Spaceline
 (require 'spaceline-config)
@@ -80,6 +85,7 @@
 (with-eval-after-load 'company
   (add-hook 'c++-mode-hook 'company-mode)
   (add-hook 'c-mode-hook 'company-mode))
+;;------------------------------------------------------------------
 
 ;; Auto-complete for HTML with company
 (add-to-list 'company-backends 'company-web-html)
@@ -102,3 +108,5 @@ an opening tag that is not followed by a matching closing tag."
 
 (eval-after-load "sgml-mode"
   '(define-key sgml-mode-map ">" 'my-sgml-insert-gt))
+;;------------------------------------------------------------------
+
