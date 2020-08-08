@@ -27,7 +27,7 @@ not run as intended.
 8. lsp-java
 9. which-key
 10. flycheck
-11. lsp-ui (Haven't been setup properly yet!)
+11. lsp-ui
 12. dap-mode (Haven't been setup properly yet!)
 ** Handy shortcuts
 To use the terminal inside emacs, use: *C-c s*. 
