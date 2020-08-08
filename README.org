@@ -50,6 +50,7 @@ It will only work while being in lsp-java mode!
     :bind ("M-RET" . lsp-execute-code-action))
 #+END_SRC
 
+A handly shortcut for java devs, flycheck-list-errors *C-c ! l*
 ** Minor features
 This config comes with balanced parentheses, brackets, braces and quotes.
 This comfig can also add closing tags when working with html files. Simply
