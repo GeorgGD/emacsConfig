@@ -110,3 +110,35 @@ an opening tag that is not followed by a matching closing tag."
   '(define-key sgml-mode-map ">" 'my-sgml-insert-gt))
 ;;------------------------------------------------------------------
 
+;; LSP-Java, IDE package
+(use-package lsp-java
+  :config
+  (add-hook 'java-mode-hook #'lsp)
+  (add-hook 'java-mode-hook 'yas-global-mode)
+  (add-hook 'java-mode-hook 'which-key-mode)
+  (add-hook 'java-mode-hook 'flycheck-mode)
+  ;; Java has different indentation, the code below fixes that
+  (add-hook 'java-mode-hook (lambda ()
+			      (setq c-basic-offset 4
+				    tab-width 4
+				    indent-tabs-mode t)))
+
+  ;; Turns on Flycheck errors list at the buttom
+  (add-to-list 'display-buffer-alist
+	       `(,(rx bos "*Flycheck errors*" eos)
+		 (display-buffer-reuse-window
+		  display-buffer-in-side-window)
+		 (side            . bottom)
+		 (reusable-frames . visible)
+		 (window-height   . 0.15)))
+
+  (use-package lsp-mode :ensure t
+    :bind ("M-RET" . lsp-execute-code-action))
+  (use-package lsp-ui
+    :ensure t
+    :config
+    (setq lsp-prefer-flymake nil
+	  lsp-ui-doc-delay 5.0
+	  lsp-ui-sideline-enable nil
+	  lsp-ui-sideline-show-symbol nil)))
+;;------------------------------------------------------------------
