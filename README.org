@@ -29,6 +29,7 @@ not run as intended.
 10. flycheck
 11. lsp-ui
 12. dap-mode (Haven't been setup properly yet!)
+13. helm 
 ** Handy shortcuts
 To use the terminal inside emacs, use: *C-c s*. 
 #+BEGIN_SRC emacs-lisp
