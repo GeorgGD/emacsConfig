@@ -1,3 +1,6 @@
+;; Will maximize screen when starting emacs
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 (package-initialize)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs essentials
