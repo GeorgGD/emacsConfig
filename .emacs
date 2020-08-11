@@ -174,6 +174,7 @@ an opening tag that is not followed by a matching closing tag."
   :config
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
   (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
   (setq helm-display-header-line nil)
   (set-face-attribute 'helm-source-header nil :height 0.1)
   (helm-autoresize-mode 1)
