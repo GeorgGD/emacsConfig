@@ -8,7 +8,7 @@
 (setq inhibit-startup-screen t)
 (menu-bar-mode 0)
 (tool-bar-mode 0)
-(set-default-font "Ubuntu Mono-13")
+(set-frame-font "Ubuntu Mono-13")
 (show-paren-mode 1)
 (setq show-paren-style 'mixed)
 (global-linum-mode t)
