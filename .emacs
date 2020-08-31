@@ -45,13 +45,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (spacemacs-dark)))
+ '(custom-enabled-themes '(spacemacs-dark))
  '(custom-safe-themes
-   (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
  '(package-selected-packages
-   (quote
-    (helm yasnippet dap-mode lsp-ui flycheck which-key lsp-java company-emacs-eclim eclim company-web company company-irony spacemacs-theme spaceline irony))))
+   '(treemacs helm yasnippet dap-mode lsp-ui flycheck which-key lsp-java company-emacs-eclim eclim company-web company company-irony spacemacs-theme spaceline irony)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -128,6 +126,7 @@ an opening tag that is not followed by a matching closing tag."
 (use-package lsp-java
   :ensure t
   :config
+  (require 'dap-java)
   (add-hook 'java-mode-hook #'lsp)
   (add-hook 'java-mode-hook 'yas-global-mode)
   
@@ -156,7 +155,16 @@ an opening tag that is not followed by a matching closing tag."
     (setq lsp-prefer-flymake nil
 	  lsp-ui-doc-delay 5.0
 	  lsp-ui-sideline-enable nil
-	  lsp-ui-sideline-show-symbol nil)))
+	  lsp-ui-sideline-show-symbol nil))
+  (use-package treemacs
+    :ensure t
+    :bind
+    ("C-c t" . 'treemacs)
+    ("C-c C-t" . 'treemacs-select-window)
+    :config
+    (add-hook 'treemacs-mode-hook
+	      (lambda () (treemacs-resize-icons 15)))
+    (setq treemacs-is-never-other-window t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Helm
@@ -181,3 +189,4 @@ an opening tag that is not followed by a matching closing tag."
   (setq helm-autoresize-max-height 25)
   (setq helm-autoresize-min-height 25)
   (helm-mode 1))
+
