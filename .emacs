@@ -16,6 +16,23 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Macro for running shell (C-c s)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun my-term (name _action)
+  "Determine whether NAME names a `term-mode' buffer."
+  (with-current-buffer name
+    (derived-mode-p #'term-mode)))
+
+(defun my-terminal ()
+  "Start Bash in a terminal emulator.
+Like `term', but respect buffer display actions."
+  (interactive)
+  (let ((switch-to-buffer-obey-display-actions t))
+    (term "/bin/bash")))
+
+(add-to-list 'display-buffer-alist
+	     '(my-term () (inhibit-same-window . t)
+		       (display-buffer-below-selected)
+		       (window-height . 0.20)))
+
 (global-set-key
  (kbd "C-c s")
  (lambda ()
