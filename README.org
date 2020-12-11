@@ -16,6 +16,10 @@ not run as intended.
 - cmake :: sudo apt install cmake
 - libclang-dev :: sudo apt install libclang-dev 
 
+For autocompletion in Python 3 you will need:
+- elpy :: sudo pip3 install elpy
+- jedi :: sudo pip3 install jedi
+- rope :: sudo pip3 install rope
 ** Packages
 1. spaceline
 2. company
@@ -31,6 +35,8 @@ not run as intended.
 12. dap-mode (Haven't been setup properly yet!)
 13. helm 
 14. treemacs
+15. elpy
+16. highlight-indent-guides
 ** Handy shortcuts
 To use the terminal inside emacs, use: *C-c s*. 
 #+BEGIN_SRC emacs-lisp
