@@ -208,3 +208,25 @@ an opening tag that is not followed by a matching closing tag."
   (setq helm-autoresize-min-height 25)
   (helm-mode 1))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Python IDE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'highlight-indent-guides)
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable)
+  :hook
+  (prog-mode . highlight-indent-guides-mode)
+  (elpy-mode . (lambda ()
+	       (setq c-basic-offset 4
+		     tab-width 4
+		     python-indent-offset 4)))
+  :config
+  (define-key yas-minor-mode-map (kbd "C-c k") 'yas-expand)
+  (setq highlight-indent-guides-method 'bitmap)
+  
+  (setq highlight-indent-guides-auto-enabled nil)
+  (set-face-background 'highlight-indent-guides-odd-face "#A47CB8")
+  (set-face-background 'highlight-indent-guides-even-face "#A47CB8")
+  (set-face-foreground 'highlight-indent-guides-character-face "#A47CB8"))
