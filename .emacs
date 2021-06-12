@@ -38,7 +38,7 @@ Like `term', but respect buffer display actions."
  (lambda ()
    (interactive)
    (let ((current-prefix-arg '(4)))
-     (call-interactively #'term))))
+     (call-interactively #'my-terminal))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Balanced parentheses
@@ -62,11 +62,13 @@ Like `term', but respect buffer display actions."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(spacemacs-dark))
+ '(custom-enabled-themes (quote (spacemacs-dark)))
  '(custom-safe-themes
-   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+   (quote
+    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
  '(package-selected-packages
-   '(highlight-indent-guides s pyvenv highlight-indentation lsp-python-ms elpy treemacs helm yasnippet dap-mode lsp-ui flycheck which-key lsp-java company-emacs-eclim eclim company-web company company-irony spacemacs-theme spaceline irony))
+   (quote
+    (lsp-mode highlight-indent-guides s pyvenv highlight-indentation elpy treemacs helm yasnippet dap-mode lsp-ui flycheck which-key lsp-java company-emacs-eclim eclim company-web company company-irony spacemacs-theme spaceline irony)))
  '(python-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -165,7 +167,8 @@ an opening tag that is not followed by a matching closing tag."
 		 (reusable-frames . visible)
 		 (window-height   . 0.15)))
 
-  (use-package lsp-mode :ensure t
+  (use-package lsp-mode
+    :ensure t
     :bind ("M-RET" . lsp-execute-code-action))
   (use-package lsp-ui
     :ensure t
@@ -212,21 +215,20 @@ an opening tag that is not followed by a matching closing tag."
 ;; Python IDE
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'highlight-indent-guides)
-(use-package elpy
-  :ensure t
-  :init
-  (elpy-enable)
+
+(use-package python-mode
+  :ensure nil
   :hook
-  (prog-mode . highlight-indent-guides-mode)
-  (elpy-mode . (lambda ()
-	       (setq c-basic-offset 4
-		     tab-width 4
-		     python-indent-offset 4)))
+  (python-mode . lsp)
+  :custom
+  (python-shell-interpreter "python3.9"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LSP-Mode IDE
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
   :config
-  (define-key yas-minor-mode-map (kbd "C-c k") 'yas-expand)
-  (setq highlight-indent-guides-method 'bitmap)
-  
-  (setq highlight-indent-guides-auto-enabled nil)
-  (set-face-background 'highlight-indent-guides-odd-face "#A47CB8")
-  (set-face-background 'highlight-indent-guides-even-face "#A47CB8")
-  (set-face-foreground 'highlight-indent-guides-character-face "#A47CB8"))
+  (setq lsp-headerline-breadcrumb-enable nil))
