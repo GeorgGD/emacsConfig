@@ -1,2 +1,23 @@
 #+TITLE: Emancs Config
-#+PROPERTY: header-args :tangle ~/.emacs
+#+PROPERTY: header-args :emacs-lisp :tangle  ~/.emacs
+
+* Table of Content
+- [[#general-configuration][General Configuration]]
+  - [[#emacs-essentials][Emacs Essentials]]
+  - [[#balanced-parentheses][Balanced Parentheses]]
+- [[#shell-on-emacs][Shell On Emacs]]
+- [[#package-management][Package Management]]
+- [[#theme][Theme]]
+  - [[#spacemacs-dark-theme][Spacemacs-dark theme]]
+  - [[#spaceline][Spaceline]]
+- [[#org-mode][Org Mode]]
+- [[#company][Company]]
+- [[#helm][Helm]]
+- [[#lsp-mode][LSP Mode]]
+- [[#development][Development]]
+  - [[#git][Git]]
+  - [[#languages][Languages]]
+    - [[#cc][C/C++]]
+    - [[#html][HTML]]
+    - [[#java][Java]]
+    - [[#python][Python]]
