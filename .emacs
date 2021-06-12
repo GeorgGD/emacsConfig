@@ -281,3 +281,10 @@ an opening tag that is not followed by a matching closing tag."
 (use-package visual-fill-column
   :defer t
   :hook (org-mode . gd/org-mode-visual-fill))
+
+;; Structure Templates
+(require 'org-tempo)
+
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
