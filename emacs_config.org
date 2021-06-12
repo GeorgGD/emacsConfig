@@ -1,0 +1,2 @@
+#+TITLE: Emancs Config
+#+PROPERTY: header-args :tangle ~/.emacs
