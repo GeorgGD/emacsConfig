@@ -52,7 +52,17 @@ Like `term', but respect buffer display actions."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; MELPA package archive
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Initialize package sources
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(require 'package)
+
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+			 ("org" . "https://orgmode.org/elpa/")
+			 ("elpa" . "https://elpa.gnu.org/packages/")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Spacemacs-dark theme
@@ -224,7 +234,7 @@ an opening tag that is not followed by a matching closing tag."
   (python-shell-interpreter "python3.9"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; LSP-Mode IDE
+;; LSP-Mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -232,3 +242,4 @@ an opening tag that is not followed by a matching closing tag."
   (setq lsp-keymap-prefix "C-c l")
   :config
   (setq lsp-headerline-breadcrumb-enable nil))
+
