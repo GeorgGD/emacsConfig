@@ -47,6 +47,7 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
   (setq show-paren-style 'mixed)
   (global-linum-mode t)  
 #+end_src
+
 ** Balanced Parentheses
 #+begin_src emacs-lisp
   (electric-pair-mode 1)  
@@ -156,20 +157,21 @@ The spacemacs theme is inside of the custom set variables. I might move the cust
 ** Org Configuration
 Set up Org Mode with a basic configuration. 
 #+begin_src emacs-lisp
-  (setq org-support-shift-select t)
-  
-  (defun gd/org-mode-setup ()
-    (org-indent-mode)
-    (variable-pitch-mode 1)
-    (auto-fill-mode 0)
-    (visual-line-mode 1))
-  
-  (use-package org
-    :hook
-    (org-mode . gd/org-mode-setup)
-    :config
-    (setq org-ellipsis " ▾")
-    (setq org-startup-folded t))
+    (setq org-support-shift-select t)
+    
+    (defun gd/org-mode-setup ()
+      (org-indent-mode)
+      (variable-pitch-mode 1)
+      (auto-fill-mode 0)
+      (visual-line-mode 1)
+      (linum-mode 0))
+    
+    (use-package org
+      :hook
+      (org-mode . gd/org-mode-setup)
+      :config
+      (setq org-ellipsis " ▾")
+      (setq org-startup-folded t))
 #+end_src
 
 ** Bullets
