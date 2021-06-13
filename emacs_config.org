@@ -57,6 +57,21 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
           (?\{ . ?\})))
 #+end_src
 
+* Package Management
+Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
+#+begin_src emacs-lisp
+  (require 'package)
+  
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+  
+  (package-initialize)
+  
+  ;; On non-Guix systems, "ensure" packages by default
+  (setq use-package-always-ensure t)
+#+end_src
+
 * Shell On Emacs
 Starts a shell inside of emacs by pressing =C-c s=
 #+begin_src emacs-lisp
@@ -86,19 +101,12 @@ Starts a shell inside of emacs by pressing =C-c s=
          (call-interactively #'my-terminal))))
 #+end_src
 
-* Package Management
-Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
+** vterm
 #+begin_src emacs-lisp
-  (require 'package)
-  
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
-  
-  (package-initialize)
-  
-  ;; On non-Guix systems, "ensure" packages by default
-  (setq use-package-always-ensure t)
+  (use-package vterm
+  :commands vterm
+  :config
+  (setq vterm-max-scrollback 10000))
 #+end_src
 
 * Key Bindings
