@@ -21,7 +21,6 @@ All the packages are being downloaded by using =use-package=.
 
 Constructive feedback is always welcome!
 
-
 * TODO's
 - Fix so vterm shows in a small horizantal buffer.
 - Customize vterm.
