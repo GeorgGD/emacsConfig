@@ -1,13 +1,9 @@
 * My default settings for emacs
-The following repository contains my emacs config file.
-With a lot of hard work I have tried to turn emacs into
-a great developer environment for C programming.
+The following repository contains my personal emacs configuration. 
 
-Currently I'm attempting to turn emacs into a Java IDE
-and a Python IDE. 
+Currently I'm attempting to turn emacs into a Java IDE and a Python IDE. 
 
-In the future I will also be adding mySQL support to this
-config file but for now this will do! 
+In the future I will also be adding mySQL support to this config file but for now this will do.
 
 ** What you will need to download
 if you dont have any of these make sure to download them or company will
@@ -20,63 +16,7 @@ For autocompletion in Python 3 you will need:
 - elpy :: sudo pip3 install elpy
 - jedi :: sudo pip3 install jedi
 - rope :: sudo pip3 install rope
-** Packages
-1. spaceline
-2. company
-3. company-irony
-4. irony
-5. spacemacs-theme
-6. use-package
-7. company-web
-8. lsp-java
-9. which-key
-10. flycheck
-11. lsp-ui
-12. dap-mode (Haven't been setup properly yet!)
-13. helm 
-14. treemacs
-15. elpy
-16. highlight-indent-guides
-** Handy shortcuts
-To use the terminal inside emacs, use: *C-c s*. 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key
-   (kbd "C-c s")
-   (lambda ()
-     (interactive)
-     (let ((current-prefix-arg '(4)))
-       (call-interactively #'shell))))
-#+END_SRC
 
-Find definition is a great command to find where a 
-method/function was defined, use: *M-.*.
-
-Their is now a micro for executing code action, use *M-RET*.
-It will only work while being in lsp-java mode!
-#+BEGIN_SRC emacs-lisp
-(use-package lsp-mode :ensure t
-    :bind ("M-RET" . lsp-execute-code-action))
-#+END_SRC
-
-A handly shortcut for java devs, flycheck-list-errors *C-c ! l*
-
-Treemacs in this config will only work with lsp-java.
-To toggle treemacs use *C-c t* and to select the 
-treemacs window use *C-c C-t*.
-#+BEGIN_SRC emacs-lisp
-(use-package treemacs
-    :ensure t
-    :bind
-    ("C-c t" . 'treemacs)
-    ("C-c C-t" . 'treemacs-select-window)
-    :config
-    (add-hook 'treemacs-mode-hook
-	      (lambda () (treemacs-resize-icons 15)))
-    (setq treemacs-is-never-other-window t))
-#+END_SRC
-** Minor features
-This config comes with balanced parentheses, brackets, braces and quotes.
-This comfig can also add closing tags when working with html files. Simply
-add *>* at the end of the starting tag and the closing tag will be generated.
+All the packages are being downloaded by using =use-package=.
 
 Constructive feedback is always welcome!
