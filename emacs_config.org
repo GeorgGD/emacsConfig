@@ -1,4 +1,4 @@
-#+TITLE: Emancs Config
+#+TITLE: Emacs Config
 #+PROPERTY: header-args :emacs-lisp :tangle  ~/.emacs
 
 * Table of Content
