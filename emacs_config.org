@@ -7,6 +7,10 @@
   - [[#balanced-parentheses][Balanced Parentheses]]
 - [[#shell-on-emacs][Shell On Emacs]]
 - [[#package-management][Package Management]]
+- [[#key-bindings][Key Bindings]]
+  - [[#which-key][Which-Key]]
+  - [[#global-key-bindings][Global Key Bindings]]
+  - [[#handy-shortcuts][Handy Shortcuts]]
 - [[#theme][Theme]]
   - [[#spacemacs-dark-theme][Spacemacs-dark theme]]
   - [[#spaceline][Spaceline]]
@@ -25,7 +29,7 @@
     - [[#html][HTML]]
     - [[#java][Java]]
     - [[#python][Python]]
-
+ 
 * General Configuration
 ** Emacs Essentials
 This will maximize the screen when emacs boots up.
@@ -95,6 +99,28 @@ Set up ELPA, MELPA, and Org package repositories and load =use-package= to manag
   (setq use-package-always-ensure t)
 #+end_src
 
+* Key Bindings
+** Which-Key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :config
+    (setq which-key-idle-delay 0.3))
+#+end_src
+
+** Global Key Bindings
+Toggles which-key
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x w") 'which-key-mode)
+#+end_src
+
+** Handy Shortcuts
+- To use a shell inside emacs, use: =C-c s=
+- To find where a method/function was defined, use: =M-.=
+- Their is now a micro for executing code action, use: =M-RET=. It will only work while being in lsp-java mode!
+- A handly shortcut for java development is flycheck-list-errors, use: =C-c ! l=
+- To toggle treemacs, use: =C-c t=
+- To select the treemacs window, use: =C-c C-t=
+- To toggle which-key, use: =C-x w=
 * Theme
 ** Spacemacs-dark theme
 The spacemacs theme is inside of the custom set variables. I might move the custom-sets to a custom file in the future.
