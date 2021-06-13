@@ -195,7 +195,7 @@ Use bullet characters instead of asterisks.
 Puts padding during org-mode.
 #+begin_src emacs-lisp
     (defun gd/org-mode-visual-fill ()
-    (setq visual-fill-column-width 110
+    (setq visual-fill-column-width 120
           visual-fill-column-center-text t)
     (visual-fill-column-mode 1))
   
