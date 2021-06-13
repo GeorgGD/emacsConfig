@@ -11,6 +11,10 @@
   - [[#spacemacs-dark-theme][Spacemacs-dark theme]]
   - [[#spaceline][Spaceline]]
 - [[#org-mode][Org Mode]]
+  - [[#org-configuration][Org Configuration]]
+  - [[#bullets][Bullets]]
+  - [[#padding][Padding]]
+  - [[#structure-templates][Structure Templates]]
 - [[#company][Company]]
 - [[#helm][Helm]]
 - [[#lsp-mode][LSP Mode]]
@@ -75,3 +79,261 @@ Starts a shell inside of emacs by pressing =C-c s=
      (let ((current-prefix-arg '(4)))
        (call-interactively #'my-terminal))))
 #+end_src
+
+* Package Management
+Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
+#+begin_src emacs-lisp
+  (require 'package)
+  
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+  
+  (package-initialize)
+  
+  ;; On non-Guix systems, "ensure" packages by default
+  (setq use-package-always-ensure t)
+#+end_src
+
+* Theme
+** Spacemacs-dark theme
+The spacemacs theme is inside of the custom set variables. I might move the custom-sets to a custom file in the future.
+#+begin_src emacs-lisp
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(custom-enabled-themes (quote (spacemacs-dark)))
+   '(custom-safe-themes
+     (quote
+      ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+   '(package-selected-packages
+     (quote
+      (visual-fill-column org-bullets lsp-mode highlight-indent-guides s pyvenv highlight-indentation elpy treemacs helm yasnippet dap-mode lsp-ui flycheck which-key lsp-java company-emacs-eclim eclim company-web company company-irony spacemacs-theme spaceline irony)))
+   '(python-indent-offset 2))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+#+end_src
+
+** Spaceline
+#+begin_src emacs-lisp
+  (use-package spaceline-config)
+  (spaceline-spacemacs-theme) 
+#+end_src
+
+* Org Mode
+** Org Configuration
+Set up Org Mode with a basic configuration. 
+#+begin_src emacs-lisp
+  (setq org-support-shift-select t)
+  
+  (defun gd/org-mode-setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (auto-fill-mode 0)
+    (visual-line-mode 1))
+  
+  (use-package org
+    :hook
+    (org-mode . gd/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾")
+    (setq org-startup-folded t))
+#+end_src
+
+** Bullets
+Use bullet characters instead of asterisks.
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-superstar-remove-leading-stars t)
+    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+  
+  ;; Replace list pyphen with dot
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+    #+end_src
+
+** Padding
+Puts padding during org-mode.
+#+begin_src emacs-lisp
+    (defun gd/org-mode-visual-fill ()
+    (setq visual-fill-column-width 110
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+  
+  (use-package visual-fill-column
+    :hook (org-mode . gd/org-mode-visual-fill))
+      #+end_src
+
+** Structure Templates
+#+begin_src  emacs-lisp        
+  (require 'org-tempo)
+  
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("jv" . "src java"))
+#+end_src
+
+* Company
+Setting up company.
+#+begin_src emacs-lisp
+  (use-package company
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 3)
+    (global-company-mode t))
+#+end_src
+
+* Helm
+Helm is used to improve directory navigation.
+#+begin_src emacs-lisp
+  (use-package helm
+    :ensure t
+    :init
+    (defun tkj-list-buffers()
+      (interactive)
+      (let ((helm-full-frame t))
+        (helm-mini)))
+    
+    :bind ("C-x C-b" . 'tkj-list-buffers)
+  
+    :config
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+    (global-set-key (kbd "M-x") 'helm-M-x)
+    (global-set-key (kbd "C-x C-f") 'helm-find-files)
+    (setq helm-display-header-line nil)
+    (set-face-attribute 'helm-source-header nil :height 0.1)
+    (helm-autoresize-mode 1)
+    (setq helm-autoresize-max-height 25)
+    (setq helm-autoresize-min-height 25)
+    (helm-mode 1))
+#+end_src
+
+* LSP Mode
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :commands
+    (lsp lsp-deferred)
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+    :config
+    (setq lsp-headerline-breadcrumb-enable nil))
+#+end_src
+
+* Development
+** Git
+** Languages
+*** C/C++
+Uses =irony-mode= together with =libclang= to provide code completion. You will need to have =clang=, =cmake= and =libclang= in your system to use the code completion!
+#+begin_src emacs-lisp
+  (use-package company-irony
+    :ensure t
+    :config
+    (require 'company)
+    (add-to-list 'company-backends 'company-irony))
+  
+  (use-package irony
+    :ensure t
+    :config
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+  
+  (with-eval-after-load 'company
+    (add-hook 'c++-mode-hook 'company-mode)
+    (add-hook 'c-mode-hook 'company-mode))
+#+end_src
+
+*** HTML
+This solution will be changed in the future
+#+begin_src emacs-lisp
+  (add-to-list 'company-backends 'company-web-html)
+  
+  (defun my-sgml-insert-gt ()
+    "Inserts a `>' character and calls 
+  `my-sgml-close-tag-if-necessary', leaving point where it is."
+    (interactive)
+    (insert ">")
+    (save-excursion (my-sgml-close-tag-if-necessary)))
+  
+  (defun my-sgml-close-tag-if-necessary ()
+    "Calls sgml-close-tag if the tag immediately before point is
+  an opening tag that is not followed by a matching closing tag."
+    (when (looking-back "<\\s-*\\([^</> \t\r\n]+\\)[^</>]*>")
+      (let ((tag (match-string 1)))
+        (unless (and (not (sgml-unclosed-tag-p tag))
+             (looking-at (concat "\\s-*<\\s-*/\\s-*" tag "\\s-*>")))
+      (sgml-close-tag)))))
+  
+  (eval-after-load "sgml-mode"
+    '(define-key sgml-mode-map ">" 'my-sgml-insert-gt)) 
+#+end_src
+
+*** Java
+NOTE: This solution isn't ideal and will be improved in the future
+#+begin_src emacs-lisp
+(use-package lsp-java
+  :ensure t
+  :config
+  (require 'dap-java)
+  (add-hook 'java-mode-hook #'lsp)
+  (add-hook 'java-mode-hook 'yas-global-mode)
+  
+  (add-hook 'java-mode-hook 'which-key-mode)
+  (add-hook 'java-mode-hook 'flycheck-mode)
+  ;; Java has different indentation, the code below fixes that
+  (add-hook 'java-mode-hook (lambda ()
+			      (setq c-basic-offset 4
+				    tab-width 4
+				    indent-tabs-mode t)))
+
+  ;; Turns on Flycheck errors list at the buttom
+  (add-to-list 'display-buffer-alist
+	       `(,(rx bos "*Flycheck errors*" eos)
+		 (display-buffer-reuse-window
+		  display-buffer-in-side-window)
+		 (side            . bottom)
+		 (reusable-frames . visible)
+		 (window-height   . 0.15)))
+
+  (use-package lsp-mode
+    :ensure t
+    :bind ("M-RET" . lsp-execute-code-action))
+  (use-package lsp-ui
+    :ensure t
+    :config
+    (setq lsp-prefer-flymake nil
+	  lsp-ui-doc-delay 5.0
+	  lsp-ui-sideline-enable nil
+	  lsp-ui-sideline-show-symbol nil))
+  (use-package treemacs
+    :ensure t
+    :bind
+    ("C-c t" . 'treemacs)
+    ("C-c C-t" . 'treemacs-select-window)
+    :config
+    (add-hook 'treemacs-mode-hook
+	      (lambda () (treemacs-resize-icons 15)))
+    (setq treemacs-is-never-other-window t)))
+#+end_src
+
+*** Python
+#+begin_src emacs-lisp
+(use-package python-mode
+  :ensure nil
+  :hook
+  (python-mode . lsp)
+  :custom
+  (python-shell-interpreter "python3.9"))
+#+end_src
+
