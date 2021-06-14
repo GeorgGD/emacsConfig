@@ -389,18 +389,26 @@ NOTE: This solution isn't ideal and will be improved in the future
 * Mode Line
 ** Spaceline
 #+begin_src emacs-lisp
-  (use-package spaceline)
-  (spaceline-spacemacs-theme) 
+  (use-package spaceline
+    :config
+    (require 'spaceline-config)
+    (setq powerline-default-separator (quote arrow))
+    (spaceline-spacemacs-theme))
 #+end_src
 
 ** Enable Mode Diminishing
 Hide minor modes from the modeline by using the diminish package.
 #+begin_src emacs-lisp
-  (use-package diminish
-    :init
-    (diminish 'company-mode)
-    (diminish 'helm-mode)
-    (diminish 'buffer-face-mode)
-    (diminish 'org-indent-mode)
-    (diminish 'visual-line-mode))
+    (use-package diminish
+      :init
+      (diminish 'company-mode)
+      (diminish 'helm-mode)
+      (diminish 'buffer-face-mode)
+      (diminish 'org-indent-mode)
+      (diminish 'visual-line-mode)
+      (diminish 'lsp-mode)
+      (diminish 'abbrev-mode)
+      (diminish 'yas-minor-mode)
+      (diminish 'flycheck-mode)
+      (diminish 'eldoc-mode))
 #+end_src
