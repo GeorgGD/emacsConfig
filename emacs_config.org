@@ -19,6 +19,8 @@
 - [[#theme][Theme]]
   - [[#spacemacs-dark-theme][Spacemacs-dark theme]]
   - [[#spaceline][Spaceline]]
+- [[#mode-line][Mode Line]]
+  - [[#enable-mode-diminishing][Enable Mode Diminishing]]
 - [[#org-mode][Org Mode]]
   - [[#org-configuration][Org Configuration]]
   - [[#update-table-of-contents][Update Table of Contents]]
@@ -166,8 +168,15 @@ The spacemacs theme is inside of the custom set variables. I might move the cust
 
 ** Spaceline
 #+begin_src emacs-lisp
-  (use-package spaceline-config)
+  (use-package spaceline)
   (spaceline-spacemacs-theme) 
+#+end_src
+
+* Mode Line
+** Enable Mode Diminishing
+Hide minor modes from the modeline by using the diminish package.
+#+begin_src emacs-lisp
+  (use-package diminish)
 #+end_src
 
 * Org Mode
