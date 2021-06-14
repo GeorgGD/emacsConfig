@@ -2,11 +2,16 @@
 #+PROPERTY: header-args :emacs-lisp :tangle  ~/.emacs
 
 * Table of Content
+:PROPERTIES:
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
 - [[#general-configuration][General Configuration]]
   - [[#emacs-essentials][Emacs Essentials]]
   - [[#balanced-parentheses][Balanced Parentheses]]
-- [[#shell-on-emacs][Shell On Emacs]]
 - [[#package-management][Package Management]]
+- [[#shell-on-emacs][Shell On Emacs]]
+  - [[#vterm][vterm]]
 - [[#key-bindings][Key Bindings]]
   - [[#which-key][Which-Key]]
   - [[#global-key-bindings][Global Key Bindings]]
@@ -16,6 +21,7 @@
   - [[#spaceline][Spaceline]]
 - [[#org-mode][Org Mode]]
   - [[#org-configuration][Org Configuration]]
+  - [[#update-table-of-contents][Update Table of Contents]]
   - [[#bullets][Bullets]]
   - [[#padding][Padding]]
   - [[#structure-templates][Structure Templates]]
@@ -29,7 +35,7 @@
     - [[#html][HTML]]
     - [[#java][Java]]
     - [[#python][Python]]
- 
+:END: 
 * General Configuration
 ** Emacs Essentials
 This will maximize the screen when emacs boots up.
@@ -183,6 +189,12 @@ Set up Org Mode with a basic configuration.
       (setq org-startup-folded t))
 #+end_src
 
+** Update Table of Contents
+For updating the table of contents in an org-mode file I use org-make-toc.
+#+begin_src emacs-lisp
+  (use-package org-make-toc
+    :hook (org-mode . org-make-toc-mode))
+#+end_src
 ** Bullets
 Use bullet characters instead of asterisks.
 #+begin_src emacs-lisp
