@@ -1,27 +1,34 @@
 #+TITLE: Emacs Config
 #+PROPERTY: header-args :emacs-lisp :tangle  ~/.emacs
 
-* Table of Content
+* Table of Contents
+:PROPERTIES:
+:TOC:      :include all :ignore this
+:END:
+:CONTENTS:
 - [[#general-configuration][General Configuration]]
   - [[#emacs-essentials][Emacs Essentials]]
   - [[#balanced-parentheses][Balanced Parentheses]]
-- [[#shell-on-emacs][Shell On Emacs]]
 - [[#package-management][Package Management]]
+- [[#shell-on-emacs][Shell On Emacs]]
+  - [[#vterm][vterm]]
 - [[#key-bindings][Key Bindings]]
   - [[#which-key][Which-Key]]
   - [[#global-key-bindings][Global Key Bindings]]
   - [[#handy-shortcuts][Handy Shortcuts]]
 - [[#theme][Theme]]
   - [[#spacemacs-dark-theme][Spacemacs-dark theme]]
-  - [[#spaceline][Spaceline]]
 - [[#org-mode][Org Mode]]
   - [[#org-configuration][Org Configuration]]
+  - [[#update-table-of-contents][Update Table of Contents]]
   - [[#bullets][Bullets]]
   - [[#padding][Padding]]
   - [[#structure-templates][Structure Templates]]
 - [[#company][Company]]
 - [[#helm][Helm]]
+- [[#treemacs][Treemacs]]
 - [[#lsp-mode][LSP Mode]]
+  - [[#lsp-ui][lsp-ui]]
 - [[#development][Development]]
   - [[#git][Git]]
   - [[#languages][Languages]]
@@ -29,7 +36,11 @@
     - [[#html][HTML]]
     - [[#java][Java]]
     - [[#python][Python]]
- 
+- [[#mode-line][Mode Line]]
+  - [[#doom-modeline][Doom Modeline]]
+  - [[#spaceline][Spaceline]]
+  - [[#enable-mode-diminishing][Enable Mode Diminishing]]
+:END: 
 * General Configuration
 ** Emacs Essentials
 This will maximize the screen when emacs boots up.
@@ -60,53 +71,38 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
 * Package Management
 Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
 #+begin_src emacs-lisp
-  (require 'package)
+  (package-initialize)
   
   (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                            ("org" . "https://orgmode.org/elpa/")
                            ("elpa" . "https://elpa.gnu.org/packages/")))
   
-  (package-initialize)
-  
-  ;; On non-Guix systems, "ensure" packages by default
+  (require 'package)
+  (require 'use-package-ensure)
   (setq use-package-always-ensure t)
 #+end_src
 
 * Shell On Emacs
-Starts a shell inside of emacs by pressing =C-c s=
-#+begin_src emacs-lisp
-    (defun my-term (name _action)
-      "Determine whether NAME names a `term-mode' buffer."
-      (with-current-buffer name
-        (derived-mode-p #'term-mode)))
-    
-    (defun my-terminal ()
-      "Start Bash in a terminal emulator.
-    Like `term', but respect buffer display actions."
-      (interactive)
-      (let ((switch-to-buffer-obey-display-actions t))
-        (term "/bin/bash"))
-      (linum-mode 0))
-    
-    (add-to-list 'display-buffer-alist
-                 '(my-term () (inhibit-same-window . t)
-                           (display-buffer-below-selected)
-                           (window-height . 0.20)))
-    
-    (global-set-key
-     (kbd "C-c s")
-     (lambda ()
-       (interactive)
-       (let ((current-prefix-arg '(4)))
-         (call-interactively #'my-terminal))))
-#+end_src
-
 ** vterm
 #+begin_src emacs-lisp
   (use-package vterm
-  :commands vterm
-  :config
-  (setq vterm-max-scrollback 10000))
+    :commands vterm
+    :config
+    (setq vterm-max-scrollback 10000)
+    (setq vterm-toggle-fullscreen-p nil))
+#+end_src
+
+Making it so vterm shows up at the bottom of the screen, regardless of how many windows are being used.  
+#+begin_src emacs-lisp
+  (add-to-list 'display-buffer-alist
+               '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
+                 (display-buffer-reuse-window display-buffer-at-bottom)
+                 ;;(display-buffer-reuse-window display-buffer-in-direction)
+                 ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                 ;;(direction . bottom)
+                 (dedicated . t) ;; The buffer is dedicated to only vterm, supported in emacs27
+                 (reusable-frames . visible)
+                 (window-height . 0.25)))
 #+end_src
 
 * Key Bindings
@@ -120,7 +116,20 @@ Starts a shell inside of emacs by pressing =C-c s=
 ** Global Key Bindings
 Toggles which-key
 #+begin_src emacs-lisp
-(global-set-key (kbd "C-x w") 'which-key-mode)
+  (global-set-key (kbd "C-x w") 'which-key-mode)
+#+end_src
+
+Starts vterm
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c s") 'vterm)
+#+end_src
+
+Moving between windows
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c <up>") 'windmove-up)
+  (global-set-key (kbd "C-c <down>") 'windmove-down)
+  (global-set-key (kbd "C-c <left>") 'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
 #+end_src
 
 ** Handy Shortcuts
@@ -131,6 +140,10 @@ Toggles which-key
 - To toggle treemacs, use: =C-c t=
 - To select the treemacs window, use: =C-c C-t=
 - To toggle which-key, use: =C-x w=
+- Move to up window, use: =C-c <up>=
+- Move to down window, use: =C-c <down>=
+- Move to left window, use: =C-c <left>=
+- Move to right window, use: =C-c <right>=
 * Theme
 ** Spacemacs-dark theme
 The spacemacs theme is inside of the custom set variables. I might move the custom-sets to a custom file in the future.
@@ -156,31 +169,32 @@ The spacemacs theme is inside of the custom set variables. I might move the cust
    )
 #+end_src
 
-** Spaceline
-#+begin_src emacs-lisp
-  (use-package spaceline-config)
-  (spaceline-spacemacs-theme) 
-#+end_src
-
 * Org Mode
 ** Org Configuration
 Set up Org Mode with a basic configuration. 
 #+begin_src emacs-lisp
-    (setq org-support-shift-select t)
-    
-    (defun gd/org-mode-setup ()
-      (org-indent-mode)
-      (variable-pitch-mode 1)
-      (auto-fill-mode 0)
-      (visual-line-mode 1)
-      (linum-mode 0))
-    
-    (use-package org
-      :hook
-      (org-mode . gd/org-mode-setup)
-      :config
-      (setq org-ellipsis " ▾")
-      (setq org-startup-folded t))
+  (setq org-support-shift-select t)
+  
+  (defun gd/org-mode-setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (auto-fill-mode 0)
+    (visual-line-mode 1)
+    (linum-mode 0))
+  
+  (use-package org
+    :hook
+    (org-mode . gd/org-mode-setup)
+    :config
+    (setq org-ellipsis " ▾")
+    (setq org-startup-folded t))
+#+end_src
+
+** Update Table of Contents
+For updating the table of contents in an org-mode file I use org-make-toc.
+#+begin_src emacs-lisp
+  (use-package org-make-toc
+    :hook (org-mode . org-make-toc-mode))
 #+end_src
 
 ** Bullets
@@ -197,19 +211,19 @@ Use bullet characters instead of asterisks.
   (font-lock-add-keywords 'org-mode
                           '(("^ *\\([-]\\) "
                              (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-    #+end_src
+#+end_src
 
 ** Padding
 Puts padding during org-mode.
 #+begin_src emacs-lisp
-    (defun gd/org-mode-visual-fill ()
+  (defun gd/org-mode-visual-fill ()
     (setq visual-fill-column-width 120
           visual-fill-column-center-text t)
     (visual-fill-column-mode 1))
   
   (use-package visual-fill-column
     :hook (org-mode . gd/org-mode-visual-fill))
-      #+end_src
+#+end_src
 
 ** Structure Templates
 #+begin_src  emacs-lisp        
@@ -241,9 +255,8 @@ Helm is used to improve directory navigation.
       (interactive)
       (let ((helm-full-frame t))
         (helm-mini)))
-    
-    :bind ("C-x C-b" . 'tkj-list-buffers)
   
+    :bind ("C-x C-b" . 'tkj-list-buffers)
     :config
     (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
     (global-set-key (kbd "M-x") 'helm-M-x)
@@ -256,6 +269,19 @@ Helm is used to improve directory navigation.
     (helm-mode 1))
 #+end_src
 
+* Treemacs
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :bind
+    ("C-c t" . 'treemacs)
+    ("C-c C-t" . 'treemacs-select-window)
+    :config
+    (add-hook 'treemacs-mode-hook
+              (lambda () (treemacs-resize-icons 15)))
+    (setq treemacs-is-never-other-window t))
+#+end_src
+
 * LSP Mode
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -263,8 +289,20 @@ Helm is used to improve directory navigation.
     (lsp lsp-deferred)
     :init
     (setq lsp-keymap-prefix "C-c l")
+    :bind ("M-RET" . lsp-execute-code-action)
     :config
     (setq lsp-headerline-breadcrumb-enable nil))
+#+end_src
+
+** lsp-ui
+#+begin_src emacs-lisp
+  (use-package lsp-ui
+  :ensure t
+  :config
+  (setq lsp-prefer-flymake nil
+        lsp-ui-doc-delay 1.5
+        lsp-ui-sideline-enable nil
+        lsp-ui-sideline-show-symbol nil))
 #+end_src
 
 * Development
@@ -309,8 +347,8 @@ This solution will be changed in the future
     (when (looking-back "<\\s-*\\([^</> \t\r\n]+\\)[^</>]*>")
       (let ((tag (match-string 1)))
         (unless (and (not (sgml-unclosed-tag-p tag))
-             (looking-at (concat "\\s-*<\\s-*/\\s-*" tag "\\s-*>")))
-      (sgml-close-tag)))))
+                     (looking-at (concat "\\s-*<\\s-*/\\s-*" tag "\\s-*>")))
+          (sgml-close-tag)))))
   
   (eval-after-load "sgml-mode"
     '(define-key sgml-mode-map ">" 'my-sgml-insert-gt)) 
@@ -319,58 +357,75 @@ This solution will be changed in the future
 *** Java
 NOTE: This solution isn't ideal and will be improved in the future
 #+begin_src emacs-lisp
-(use-package lsp-java
-  :ensure t
-  :config
-  (require 'dap-java)
-  (add-hook 'java-mode-hook #'lsp)
-  (add-hook 'java-mode-hook 'yas-global-mode)
+  (use-package lsp-java
+    :ensure t
+    :config
+    (require 'dap-java)
+    (add-hook 'java-mode-hook #'lsp)
+    (add-hook 'java-mode-hook 'yas-global-mode)
   
-  (add-hook 'java-mode-hook 'which-key-mode)
-  (add-hook 'java-mode-hook 'flycheck-mode)
-  ;; Java has different indentation, the code below fixes that
-  (add-hook 'java-mode-hook (lambda ()
-			      (setq c-basic-offset 4
-				    tab-width 4
-				    indent-tabs-mode t)))
-
-  ;; Turns on Flycheck errors list at the buttom
-  (add-to-list 'display-buffer-alist
-	       `(,(rx bos "*Flycheck errors*" eos)
-		 (display-buffer-reuse-window
-		  display-buffer-in-side-window)
-		 (side            . bottom)
-		 (reusable-frames . visible)
-		 (window-height   . 0.15)))
-
-  (use-package lsp-mode
-    :ensure t
-    :bind ("M-RET" . lsp-execute-code-action))
-  (use-package lsp-ui
-    :ensure t
-    :config
-    (setq lsp-prefer-flymake nil
-	  lsp-ui-doc-delay 5.0
-	  lsp-ui-sideline-enable nil
-	  lsp-ui-sideline-show-symbol nil))
-  (use-package treemacs
-    :ensure t
-    :bind
-    ("C-c t" . 'treemacs)
-    ("C-c C-t" . 'treemacs-select-window)
-    :config
-    (add-hook 'treemacs-mode-hook
-	      (lambda () (treemacs-resize-icons 15)))
-    (setq treemacs-is-never-other-window t)))
+    (add-hook 'java-mode-hook 'flycheck-mode)
+    ;; Java has different indentation, the code below fixes that
+    (add-hook 'java-mode-hook (lambda ()
+                                (setq c-basic-offset 4
+                                      tab-width 4
+                                      indent-tabs-mode t)))
+  
+    ;; Turns on Flycheck errors list at the buttom
+    (add-to-list 'display-buffer-alist
+                 `(,(rx bos "*Flycheck errors*" eos)
+                   (display-buffer-reuse-window
+                    display-buffer-in-side-window)
+                   (side            . bottom)
+                   (reusable-frames . visible)
+                   (window-height   . 0.15))))
 #+end_src
 
 *** Python
 #+begin_src emacs-lisp
-(use-package python-mode
-  :ensure nil
-  :hook
-  (python-mode . lsp)
-  :custom
-  (python-shell-interpreter "python3.9"))
+  (use-package python-mode
+    :ensure nil
+    :hook
+    (python-mode . lsp)
+    :custom
+    (python-shell-interpreter "python3.9"))
+#+end_src
+
+* Mode Line
+** Doom Modeline
+#+begin_src emacs-lisp
+  (use-package all-the-icons)
+  (use-package doom-modeline
+    :hook (after-init . doom-modeline-mode)
+    :config
+    (setq doom-modeline-buffer-file-name-style 'file-name)
+    (setq inhibit-compacting-font-caches t))
+#+end_src
+
+** Spaceline
+I'm currently using doom modeline but spaceline is here incase I want to revert back to it.
+#+begin_src emacs-lisp
+  (use-package spaceline
+    :config
+    (require 'spaceline-config)
+    ;(spaceline-emacs-theme)
+    )  
+#+end_src
+
+** Enable Mode Diminishing
+Hide minor modes from the modeline by using the diminish package.
+#+begin_src emacs-lisp
+    (use-package diminish
+      :init
+      (diminish 'company-mode)
+      (diminish 'helm-mode)
+      (diminish 'buffer-face-mode)
+      (diminish 'org-indent-mode)
+      (diminish 'visual-line-mode)
+      (diminish 'lsp-mode)
+      (diminish 'abbrev-mode)
+      (diminish 'yas-minor-mode)
+      (diminish 'flycheck-mode)
+      (diminish 'eldoc-mode))
 #+end_src
 
