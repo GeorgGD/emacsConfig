@@ -127,6 +127,7 @@ Moving between windows
   (global-set-key (kbd "C-c <left>") 'windmove-left)
   (global-set-key (kbd "C-c <right>") 'windmove-right)
 #+end_src
+
 ** Handy Shortcuts
 - To use a shell inside emacs, use: =C-c s=
 - To find where a method/function was defined, use: =M-.=
@@ -135,6 +136,10 @@ Moving between windows
 - To toggle treemacs, use: =C-c t=
 - To select the treemacs window, use: =C-c C-t=
 - To toggle which-key, use: =C-x w=
+- Move to up window, use: =C-c <up>=
+- Move to down window, use: =C-c <down>=
+- Move to left window, use: =C-c <left>=
+- Move to right window, use: =C-c <right>=
 * Theme
 ** Spacemacs-dark theme
 The spacemacs theme is inside of the custom set variables. I might move the custom-sets to a custom file in the future.
