@@ -394,7 +394,8 @@ NOTE: This solution isn't ideal and will be improved in the future
   (use-package doom-modeline
     :hook (after-init . doom-modeline-mode)
     :config
-    (setq doom-modeline-buffer-file-name-style 'file-name))
+    (setq doom-modeline-buffer-file-name-style 'file-name)
+    (setq inhibit-compacting-font-caches t))
 #+end_src
 
 ** Spaceline
@@ -404,7 +405,7 @@ I'm currently using doom modeline but spaceline is here incase I want to revert 
     :config
     (require 'spaceline-config)
     ;(spaceline-emacs-theme)
-    )
+    )  
 #+end_src
 
 ** Enable Mode Diminishing
@@ -423,3 +424,4 @@ Hide minor modes from the modeline by using the diminish package.
       (diminish 'flycheck-mode)
       (diminish 'eldoc-mode))
 #+end_src
+
