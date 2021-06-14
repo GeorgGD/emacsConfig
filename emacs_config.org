@@ -26,6 +26,7 @@
   - [[#structure-templates][Structure Templates]]
 - [[#company][Company]]
 - [[#helm][Helm]]
+- [[#treemacs][Treemacs]]
 - [[#lsp-mode][LSP Mode]]
   - [[#lsp-ui][lsp-ui]]
 - [[#development][Development]]
@@ -268,6 +269,19 @@ Helm is used to improve directory navigation.
     (helm-mode 1))
 #+end_src
 
+* Treemacs
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :bind
+    ("C-c t" . 'treemacs)
+    ("C-c C-t" . 'treemacs-select-window)
+    :config
+    (add-hook 'treemacs-mode-hook
+              (lambda () (treemacs-resize-icons 15)))
+    (setq treemacs-is-never-other-window t))
+#+end_src
+
 * LSP Mode
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -364,17 +378,7 @@ NOTE: This solution isn't ideal and will be improved in the future
                     display-buffer-in-side-window)
                    (side            . bottom)
                    (reusable-frames . visible)
-                   (window-height   . 0.15)))
-  
-    (use-package treemacs
-      :ensure t
-      :bind
-      ("C-c t" . 'treemacs)
-      ("C-c C-t" . 'treemacs-select-window)
-      :config
-      (add-hook 'treemacs-mode-hook
-                (lambda () (treemacs-resize-icons 15)))
-      (setq treemacs-is-never-other-window t)))
+                   (window-height   . 0.15))))
 #+end_src
 
 *** Python
