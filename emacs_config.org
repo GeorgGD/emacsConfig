@@ -37,6 +37,7 @@
     - [[#python][Python]]
 - [[#mode-line][Mode Line]]
   - [[#doom-modeline][Doom Modeline]]
+  - [[#spaceline][Spaceline]]
   - [[#enable-mode-diminishing][Enable Mode Diminishing]]
 :END: 
 * General Configuration
@@ -394,6 +395,16 @@ NOTE: This solution isn't ideal and will be improved in the future
     :hook (after-init . doom-modeline-mode)
     :config
     (setq doom-modeline-buffer-file-name-style 'file-name))
+#+end_src
+
+** Spaceline
+I'm currently using doom modeline but spaceline is here incase I want to revert back to it.
+#+begin_src emacs-lisp
+  (use-package spaceline
+    :config
+    (require 'spaceline-config)
+    ;(spaceline-emacs-theme)
+    )
 #+end_src
 
 ** Enable Mode Diminishing
