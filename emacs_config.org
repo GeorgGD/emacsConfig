@@ -36,7 +36,7 @@
     - [[#java][Java]]
     - [[#python][Python]]
 - [[#mode-line][Mode Line]]
-  - [[#spaceline][Spaceline]]
+  - [[#doom-modeline][Doom Modeline]]
   - [[#enable-mode-diminishing][Enable Mode Diminishing]]
 :END: 
 * General Configuration
@@ -387,13 +387,13 @@ NOTE: This solution isn't ideal and will be improved in the future
 #+end_src
 
 * Mode Line
-** Spaceline
+** Doom Modeline
 #+begin_src emacs-lisp
-  (use-package spaceline
+  (use-package all-the-icons)
+  (use-package doom-modeline
+    :hook (after-init . doom-modeline-mode)
     :config
-    (require 'spaceline-config)
-    (setq powerline-default-separator (quote arrow))
-    (spaceline-spacemacs-theme))
+    (setq doom-modeline-buffer-file-name-style 'file-name))
 #+end_src
 
 ** Enable Mode Diminishing
