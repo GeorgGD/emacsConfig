@@ -79,7 +79,7 @@ Set up ELPA, MELPA, and Org package repositories and load =use-package= to manag
 #+end_src
 
 * Shell On Emacs
-** vterm 
+** vterm
 #+begin_src emacs-lisp
   (use-package vterm
     :commands vterm
@@ -88,7 +88,7 @@ Set up ELPA, MELPA, and Org package repositories and load =use-package= to manag
     (setq vterm-toggle-fullscreen-p nil))
   #+end_src
 
-Making it so vterm shows up at the bottom of the screen, regardless of how many buffers are being used.  
+Making it so vterm shows up at the bottom of the screen, regardless of how many windows are being used.  
 #+begin_src emacs-lisp
   (add-to-list 'display-buffer-alist
              '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
@@ -120,6 +120,13 @@ Starts vterm
   (global-set-key (kbd "C-c s") 'vterm)
 #+end_src
 
+Moving between windows
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c <up>") 'windmove-up)
+  (global-set-key (kbd "C-c <down>") 'windmove-down)
+  (global-set-key (kbd "C-c <left>") 'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+#+end_src
 ** Handy Shortcuts
 - To use a shell inside emacs, use: =C-c s=
 - To find where a method/function was defined, use: =M-.=
