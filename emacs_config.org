@@ -18,6 +18,7 @@
   - [[#handy-shortcuts][Handy Shortcuts]]
 - [[#theme][Theme]]
   - [[#spacemacs-dark-theme][Spacemacs-dark theme]]
+- [[#yasnippet][Yasnippet]]
 - [[#org-mode][Org Mode]]
   - [[#org-configuration][Org Configuration]]
   - [[#update-table-of-contents][Update Table of Contents]]
@@ -167,6 +168,16 @@ The spacemacs theme is inside of the custom set variables. I might move the cust
    ;; Your init file should contain only one such instance.
    ;; If there is more than one, they won't work right.
    )
+#+end_src
+
+* Yasnippet
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :config
+    (add-hook 'yas-minor-mode-hook (lambda ()
+                                     (yas-activate-extra-mode 'fundamental-mode))))
+  (use-package yasnippet-snippets)
+  (yas-global-mode t)
 #+end_src
 
 * Org Mode
