@@ -184,10 +184,16 @@ Set up Org Mode with a basic configuration.
   
   (use-package org
     :hook
-    (org-mode . gd/org-mode-setup)
+    (org-mode . gd/org-mode-setup)  
     :config
     (setq org-ellipsis " ▾")
-    (setq org-startup-folded t))
+    (setq org-startup-folded t)
+  
+    ;; Disables <> auto pairing in electric mode with org-mode
+    (add-hook 'org-mode-hook (lambda ()
+                               (setq-local electric-pair-inhibit-predicate
+                                           `(lambda (c)
+                                              (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c)))))))
 #+end_src
 
 ** Update Table of Contents
@@ -286,10 +292,10 @@ Helm is used to improve directory navigation.
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands
-    (lsp lsp-deferred)
-    :init
-    (setq lsp-keymap-prefix "C-c l")
-    :bind ("M-RET" . lsp-execute-code-action)
+    (lsp lsp-deferred)    
+    :bind
+    ("M-RET" . lsp-execute-code-action)
+    ("C-c l" . lsp-keymap-prefix)
     :config
     (setq lsp-headerline-breadcrumb-enable nil))
 #+end_src
@@ -330,28 +336,20 @@ Uses =irony-mode= together with =libclang= to provide code completion. You will 
 #+end_src
 
 *** HTML
-This solution will be changed in the future
 #+begin_src emacs-lisp
-  (add-to-list 'company-backends 'company-web-html)
+  (use-package web-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
   
-  (defun my-sgml-insert-gt ()
-    "Inserts a `>' character and calls 
-  `my-sgml-close-tag-if-necessary', leaving point where it is."
-    (interactive)
-    (insert ">")
-    (save-excursion (my-sgml-close-tag-if-necessary)))
+    (add-to-list 'company-backends 'company-css)
+    (add-to-list 'company-backends 'company-web-html)
   
-  (defun my-sgml-close-tag-if-necessary ()
-    "Calls sgml-close-tag if the tag immediately before point is
-  an opening tag that is not followed by a matching closing tag."
-    (when (looking-back "<\\s-*\\([^</> \t\r\n]+\\)[^</>]*>")
-      (let ((tag (match-string 1)))
-        (unless (and (not (sgml-unclosed-tag-p tag))
-                     (looking-at (concat "\\s-*<\\s-*/\\s-*" tag "\\s-*>")))
-          (sgml-close-tag)))))
-  
-  (eval-after-load "sgml-mode"
-    '(define-key sgml-mode-map ">" 'my-sgml-insert-gt)) 
+    (setq-default web-mode-code-indent-offset 2)
+    (setq-default web-mode-markup-indent-offset 2)
+    (setq-default web-mode-attribute-indent-offset 2)
+    (setq web-mode-enable-current-element-highlight t))
 #+end_src
 
 *** Java
@@ -362,9 +360,9 @@ NOTE: This solution isn't ideal and will be improved in the future
     :config
     (require 'dap-java)
     (add-hook 'java-mode-hook #'lsp)
-    (add-hook 'java-mode-hook 'yas-global-mode)
-  
+    (add-hook 'java-mode-hook 'yas-global-mode) 
     (add-hook 'java-mode-hook 'flycheck-mode)
+    
     ;; Java has different indentation, the code below fixes that
     (add-hook 'java-mode-hook (lambda ()
                                 (setq c-basic-offset 4
@@ -384,7 +382,6 @@ NOTE: This solution isn't ideal and will be improved in the future
 *** Python
 #+begin_src emacs-lisp
   (use-package python-mode
-    :ensure nil
     :hook
     (python-mode . lsp)
     :custom
@@ -428,4 +425,6 @@ Hide minor modes from the modeline by using the diminish package.
       (diminish 'flycheck-mode)
       (diminish 'eldoc-mode))
 #+end_src
+
+
 
