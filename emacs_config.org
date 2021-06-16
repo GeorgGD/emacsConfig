@@ -184,10 +184,16 @@ Set up Org Mode with a basic configuration.
   
   (use-package org
     :hook
-    (org-mode . gd/org-mode-setup)
+    (org-mode . gd/org-mode-setup)  
     :config
     (setq org-ellipsis " ▾")
-    (setq org-startup-folded t))
+    (setq org-startup-folded t)
+  
+    ;; Disables <> auto pairing in electric mode with org-mode
+    (add-hook 'org-mode-hook (lambda ()
+                               (setq-local electric-pair-inhibit-predicate
+                                           `(lambda (c)
+                                              (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c)))))))
 #+end_src
 
 ** Update Table of Contents
@@ -286,10 +292,10 @@ Helm is used to improve directory navigation.
 #+begin_src emacs-lisp
   (use-package lsp-mode
     :commands
-    (lsp lsp-deferred)
-    :init
-    (setq lsp-keymap-prefix "C-c l")
-    :bind ("M-RET" . lsp-execute-code-action)
+    (lsp lsp-deferred)    
+    :bind
+    ("M-RET" . lsp-execute-code-action)
+    ("C-c l" . lsp-keymap-prefix)
     :config
     (setq lsp-headerline-breadcrumb-enable nil))
 #+end_src
@@ -362,9 +368,9 @@ NOTE: This solution isn't ideal and will be improved in the future
     :config
     (require 'dap-java)
     (add-hook 'java-mode-hook #'lsp)
-    (add-hook 'java-mode-hook 'yas-global-mode)
-  
+    (add-hook 'java-mode-hook 'yas-global-mode) 
     (add-hook 'java-mode-hook 'flycheck-mode)
+    
     ;; Java has different indentation, the code below fixes that
     (add-hook 'java-mode-hook (lambda ()
                                 (setq c-basic-offset 4
@@ -384,7 +390,6 @@ NOTE: This solution isn't ideal and will be improved in the future
 *** Python
 #+begin_src emacs-lisp
   (use-package python-mode
-    :ensure nil
     :hook
     (python-mode . lsp)
     :custom
@@ -428,4 +433,6 @@ Hide minor modes from the modeline by using the diminish package.
       (diminish 'flycheck-mode)
       (diminish 'eldoc-mode))
 #+end_src
+
+
 
