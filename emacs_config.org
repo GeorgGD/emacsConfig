@@ -336,28 +336,20 @@ Uses =irony-mode= together with =libclang= to provide code completion. You will 
 #+end_src
 
 *** HTML
-This solution will be changed in the future
 #+begin_src emacs-lisp
-  (add-to-list 'company-backends 'company-web-html)
+  (use-package web-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
   
-  (defun my-sgml-insert-gt ()
-    "Inserts a `>' character and calls 
-  `my-sgml-close-tag-if-necessary', leaving point where it is."
-    (interactive)
-    (insert ">")
-    (save-excursion (my-sgml-close-tag-if-necessary)))
+    (add-to-list 'company-backends 'company-css)
+    (add-to-list 'company-backends 'company-web-html)
   
-  (defun my-sgml-close-tag-if-necessary ()
-    "Calls sgml-close-tag if the tag immediately before point is
-  an opening tag that is not followed by a matching closing tag."
-    (when (looking-back "<\\s-*\\([^</> \t\r\n]+\\)[^</>]*>")
-      (let ((tag (match-string 1)))
-        (unless (and (not (sgml-unclosed-tag-p tag))
-                     (looking-at (concat "\\s-*<\\s-*/\\s-*" tag "\\s-*>")))
-          (sgml-close-tag)))))
-  
-  (eval-after-load "sgml-mode"
-    '(define-key sgml-mode-map ">" 'my-sgml-insert-gt)) 
+    (setq-default web-mode-code-indent-offset 2)
+    (setq-default web-mode-markup-indent-offset 2)
+    (setq-default web-mode-attribute-indent-offset 2)
+    (setq web-mode-enable-current-element-highlight t))
 #+end_src
 
 *** Java
