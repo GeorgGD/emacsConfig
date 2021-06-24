@@ -10,6 +10,7 @@
   - [[#emacs-essentials][Emacs Essentials]]
   - [[#balanced-parentheses][Balanced Parentheses]]
 - [[#package-management][Package Management]]
+  - [[#install-packages][Install Packages]]
 - [[#shell-on-emacs][Shell On Emacs]]
   - [[#vterm][vterm]]
 - [[#key-bindings][Key Bindings]]
@@ -82,6 +83,12 @@ Set up ELPA, MELPA, and Org package repositories and load =use-package= to manag
   (setq use-package-always-ensure t)
 #+end_src
 
+** Install Packages
+This section is meant for downloading the packages that aren't being costumized but are being used in this config,
+#+begin_src emacs-lisp
+  (use-package flycheck)
+  (use-package yasnippet)
+#+end_src
 * Shell On Emacs
 ** vterm
 #+begin_src emacs-lisp
@@ -425,6 +432,7 @@ Hide minor modes from the modeline by using the diminish package.
       (diminish 'flycheck-mode)
       (diminish 'eldoc-mode))
 #+end_src
+
 
 
 
