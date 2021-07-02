@@ -357,6 +357,8 @@ Uses =irony-mode= together with =libclang= to provide code completion. You will 
     (setq-default web-mode-markup-indent-offset 2)
     (setq-default web-mode-attribute-indent-offset 2)
     (setq web-mode-enable-current-element-highlight t))
+
+  (use-package sass-mode)
 #+end_src
 
 *** Java
