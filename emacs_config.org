@@ -349,10 +349,10 @@ Uses =irony-mode= together with =libclang= to provide code completion. You will 
     (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-  
+
     (add-to-list 'company-backends 'company-css)
     (add-to-list 'company-backends 'company-web-html)
-  
+
     (setq-default web-mode-code-indent-offset 2)
     (setq-default web-mode-markup-indent-offset 2)
     (setq-default web-mode-attribute-indent-offset 2)
@@ -391,6 +391,7 @@ NOTE: This solution isn't ideal and will be improved in the future
   (use-package python-mode
     :hook
     (python-mode . lsp)
+    (python-mode . yas-minor-mode)
     :custom
     (python-shell-interpreter "python3.9"))
 #+end_src
