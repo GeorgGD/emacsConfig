@@ -37,6 +37,7 @@
     - [[#html][HTML]]
     - [[#java][Java]]
     - [[#python][Python]]
+    - [[#javascript][JavaScript]]
 - [[#mode-line][Mode Line]]
   - [[#doom-modeline][Doom Modeline]]
   - [[#spaceline][Spaceline]]
@@ -348,7 +349,6 @@ Uses =irony-mode= together with =libclang= to provide code completion. You will 
     :config
     (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
     (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
 
     (add-to-list 'company-backends 'company-css)
     (add-to-list 'company-backends 'company-web-html)
@@ -396,6 +396,30 @@ NOTE: This solution isn't ideal and will be improved in the future
     (python-mode . yas-minor-mode)
     :custom
     (python-shell-interpreter "python3.9"))
+#+end_src
+
+*** JavaScript
+RJSX mode
+#+begin_src emacs-lisp
+  (use-package rjsx-mode
+   :mode "\\.js\\'"
+   :hook (rjsx-mode . jsp))
+#+end_src
+
+Tide
+#+begin_src emacs-lisp
+  (defun setup-tide-mode()
+    "Setup function for tide"
+    (interactive)
+    (tide-setup)
+    (flycheck-mode 1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (tide-hl-identifier-mode 1)
+    (company-mode 1))
+
+  (use-package tide
+    :after (rjsx-mode company flycheck)
+    :hook (rjsx-mode . setup-tide-mode))
 #+end_src
 
 * Mode Line
