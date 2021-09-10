@@ -19,6 +19,11 @@ For autocompletion in Python 3 you will need:
 
 All the packages are being downloaded by using =use-package=.
 
+Because I'm currently using doom-modeline you will need to install the fonts from the package =all-the-icons= 
+#+begin_src emacs-lisp
+  M-x all-the-icons-install-fonts
+#+end_src
+
 Constructive feedback is always welcome!
 
 * TODO's
