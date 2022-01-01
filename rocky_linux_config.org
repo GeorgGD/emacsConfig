@@ -1,0 +1,233 @@
+#+TITLE: Emacs Config
+#+PROPERTY: header-args :emacs-lisp :tangle  ~/.emacs
+
+* Table of Contents
+  :PROPERTIES:
+  :TOC:      :include all :ignore this
+  :END:
+  :CONTENTS:
+  :END:
+
+* General Configuration
+** Emacs Essentials
+   This will maximize the screen when emacs boots up.
+   #+begin_src emacs-lisp
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))  
+   #+end_src
+
+   Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-13
+   #+begin_src emacs-lisp  
+  (setq inhibit-startup-screen t)
+  (menu-bar-mode 0)
+  (tool-bar-mode 0)
+  (show-paren-mode 1)
+  (setq show-paren-style 'mixed)
+  (global-linum-mode t)  
+   #+end_src
+
+** Balanced Parentheses
+   #+begin_src emacs-lisp
+  (electric-pair-mode 1)  
+  (setq electric-pair-pairs
+        '(
+          (?\" . ?\")
+          (?\{ . ?\})))
+   #+end_src
+
+* Package Management
+  Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
+  #+begin_src emacs-lisp
+  (package-initialize)
+  
+  (setq package-archives '(("elpa" . "https://elpa.gnu.org/packages/")
+			   ("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")))
+  
+  (require 'package)
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
+  #+end_src
+
+** Install Packages
+This section is meant for downloading the packages that aren't being costumized but are being used in this config,
+#+begin_src emacs-lisp
+  (use-package yasnippet)
+#+end_src
+
+* Key Bindings
+** Which-Key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :config
+    (setq which-key-idle-delay 0.3))
+#+end_src
+
+** Global Key Bindings
+Toggles which-key
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x w") 'which-key-mode)
+#+end_src
+
+   Moving between windows
+   #+begin_src emacs-lisp
+  (global-set-key (kbd "C-c <up>") 'windmove-up)
+  (global-set-key (kbd "C-c <down>") 'windmove-down)
+  (global-set-key (kbd "C-c <left>") 'windmove-left)
+  (global-set-key (kbd "C-c <right>") 'windmove-right)
+   #+end_src
+
+** Handy Shortcuts
+- To use a shell inside emacs, use: =C-c s=
+- To find where a method/function was defined, use: =M-.=
+- Their is now a micro for executing code action, use: =M-RET=. It will only work while being in lsp-java mode!
+- A handly shortcut for java development is flycheck-list-errors, use: =C-c ! l=
+- To toggle treemacs, use: =C-c t=
+- To select the treemacs window, use: =C-c C-t=
+- To toggle which-key, use: =C-x w=
+- Move to up window, use: =C-c <up>=
+- Move to down window, use: =C-c <down>=
+- Move to left window, use: =C-c <left>=
+- Move to right window, use: =C-c <right>=
+* Themes
+** Spacemacs 
+   The spacemacs theme is inside of the custom set variables. I might move the custom-sets to a custom file in the future.
+   #+begin_src emacs-lisp
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(custom-enabled-themes (quote (spacemacs-dark)))
+   '(custom-safe-themes
+     (quote
+      ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
+   '(package-selected-packages
+     (quote
+      (visual-fill-column org-bullets lsp-mode highlight-indent-guides s pyvenv highlight-indentation elpy treemacs helm yasnippet dap-mode lsp-ui flycheck which-key lsp-java company-emacs-eclim eclim company-web company company-irony spacemacs-theme spaceline irony)))
+   '(python-indent-offset 2))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+   #+end_src
+
+* Mode Line
+** Doom modeline
+#+begin_src emacs-lisp
+  (use-package all-the-icons)
+  (use-package doom-modeline
+    :hook (after-init . doom-modeline-mode)
+    :config
+    (setq doom-modeline-buffer-file-name-style 'file-name)
+    (setq inhibit-compacting-font-caches t))
+#+end_src
+** Spaceline
+I'm currently using doom modeline but spaceline is here incase I want to revert back to it.
+#+begin_src emacs-lisp
+(use-package spaceline
+:config
+(require 'spaceline-config)
+(spaceline-emacs-theme)
+)
+#+end_src
+
+* Org Mode
+** Org Configuration
+Set up Org Mode with a basic configuration. 
+#+begin_src emacs-lisp
+  (setq org-support-shift-select t)
+  
+  (defun gd/org-mode-setup ()
+    (org-indent-mode)
+    (variable-pitch-mode 1)
+    (auto-fill-mode 0)
+    (visual-line-mode 1)
+    (linum-mode 0))
+  
+  (use-package org
+    :hook
+    (org-mode . gd/org-mode-setup)  
+    :config
+    (setq org-ellipsis " ▾")
+    (setq org-startup-folded t)
+  
+    ;; Disables <> auto pairing in electric mode with org-mode
+    (add-hook 'org-mode-hook (lambda ()
+                               (setq-local electric-pair-inhibit-predicate
+                                           `(lambda (c)
+                                              (if (char-equal c ?<) t (,electric-pair-inhibit-predicate c)))))))
+#+end_src
+
+** Update Table of Contents
+For updating the table of contents in an org-mode file I use org-make-toc.
+#+begin_src emacs-lisp
+  (use-package org-make-toc
+    :hook (org-mode . org-make-toc-mode))
+#+end_src
+
+** Bullets
+Use bullet characters instead of asterisks.
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-superstar-remove-leading-stars t)
+    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+  
+  ;; Replace list pyphen with dot
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+#+end_src
+
+** Padding
+Puts padding during org-mode.
+#+begin_src emacs-lisp
+  (defun gd/org-mode-visual-fill ()
+    (setq visual-fill-column-width 120
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+  
+  (use-package visual-fill-column
+    :hook (org-mode . gd/org-mode-visual-fill))
+#+end_src
+
+** Structure Templates
+#+begin_src  emacs-lisp        
+  (require 'org-tempo)
+  
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("py" . "src python"))
+  (add-to-list 'org-structure-template-alist '("jv" . "src java"))
+#+end_src
+
+* Helm
+Helm is used to improve directory navigation.
+#+begin_src emacs-lisp
+  (use-package helm
+    :ensure t
+    :init
+    (defun tkj-list-buffers()
+      (interactive)
+      (let ((helm-full-frame t))
+        (helm-mini)))
+  
+    :bind ("C-x C-b" . 'tkj-list-buffers)
+    :config
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+    (global-set-key (kbd "M-x") 'helm-M-x)
+    (global-set-key (kbd "C-x C-f") 'helm-find-files)
+    (setq helm-display-header-line nil)
+    (set-face-attribute 'helm-source-header nil :height 0.1)
+    (helm-autoresize-mode 1)
+    (setq helm-autoresize-max-height 25)
+    (setq helm-autoresize-min-height 25)
+    (helm-mode 1))
+#+end_src
+
+ 
+
