@@ -58,7 +58,8 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
   (set-frame-font "Ubuntu Mono-13")
   (show-paren-mode 1)
   (setq show-paren-style 'mixed)
-  (global-linum-mode t)  
+  (global-linum-mode t)
+  (setq make-backup-files nil)
 #+end_src
 
 ** Balanced Parentheses
