@@ -36,6 +36,7 @@
     - [[#java][Java]]
     - [[#python][Python]]
     - [[#javascript][JavaScript]]
+    - [[#bash][Bash]]
 - [[#mode-line][Mode Line]]
   - [[#spaceline][Spaceline]]
   - [[#enable-mode-diminishing][Enable Mode Diminishing]]
@@ -386,6 +387,13 @@ Tide
     :hook (rjsx-mode . setup-tide-mode))
 #+end_src
 
+*** Bash
+#+begin_src sh
+(add-hook 'sh-mode-hook 'flyckech-mode)
+(add-hook 'sh-mode 'lsp) ;; checkout "https://github.com/bash-lsp/bash-language-server"
+(setq sh-basic-offset 2
+         sh-indentation 2)
+#+end_src
 * Mode Line
 ** Spaceline
 #+begin_src emacs-lisp

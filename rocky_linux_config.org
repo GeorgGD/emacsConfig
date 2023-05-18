@@ -52,6 +52,7 @@
 ** Install Packages
 This section is meant for downloading the packages that aren't being costumized but are being used in this config,
 #+begin_src emacs-lisp
+  (use-package flycheck)
   (use-package yasnippet)
 #+end_src
 
@@ -194,4 +195,11 @@ Helm is used to improve directory navigation.
 #+end_src
 
  
-
+* Development
+** Languages
+*** Bash
+#+begin_src sh
+(add-hook 'sh-mode-hook 'flyckech-mode)
+(setq sh-basic-offset 2
+         sh-indentation 2)
+#+end_src
