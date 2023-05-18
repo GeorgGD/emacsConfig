@@ -11,14 +11,12 @@
   - [[#balanced-parentheses][Balanced Parentheses]]
 - [[#package-management][Package Management]]
   - [[#install-packages][Install Packages]]
-- [[#shell-on-emacs][Shell On Emacs]]
-  - [[#vterm][vterm]]
 - [[#key-bindings][Key Bindings]]
   - [[#which-key][Which-Key]]
   - [[#global-key-bindings][Global Key Bindings]]
   - [[#handy-shortcuts][Handy Shortcuts]]
 - [[#theme][Theme]]
-  - [[#spacemacs-dark-theme][Spacemacs-dark theme]]
+  - [[#nord-theme][Nord-theme]]
 - [[#org-mode][Org Mode]]
   - [[#org-configuration][Org Configuration]]
   - [[#update-table-of-contents][Update Table of Contents]]
@@ -39,7 +37,6 @@
     - [[#python][Python]]
     - [[#javascript][JavaScript]]
 - [[#mode-line][Mode Line]]
-  - [[#doom-modeline][Doom Modeline]]
   - [[#spaceline][Spaceline]]
   - [[#enable-mode-diminishing][Enable Mode Diminishing]]
 :END: 
@@ -55,7 +52,9 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
   (setq inhibit-startup-screen t)
   (menu-bar-mode 0)
   (tool-bar-mode 0)
-  (set-frame-font "Ubuntu Mono-13")
+  (cond
+  ((find-font (font-spec :name "Ubuntu Mono-13")) 
+  (set-frame-font "Ubuntu Mono-13")))
   (show-paren-mode 1)
   (setq show-paren-style 'mixed)
   (global-linum-mode t)
@@ -74,46 +73,26 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
 * Package Management
 Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
 #+begin_src emacs-lisp
-  (package-initialize)
+(package-initialize)
   
-  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                           ("org" . "https://orgmode.org/elpa/")
-                           ("elpa" . "https://elpa.gnu.org/packages/")))
+(setq 
+package-enable-at-startup nil
+package-archives '(("melpa" . "https://melpa.org/packages/")
+("org" . "https://orgmode.org/elpa/")
+("elpa" . "https://elpa.gnu.org/packages/")))
   
-  (require 'package)
-  (require 'use-package-ensure)
-  (setq use-package-always-ensure t)
+(eval-when-compile
+(require 'package)
+(package-initialize t))
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 #+end_src
-
 ** Install Packages
 This section is meant for downloading the packages that aren't being costumized but are being used in this config,
 #+begin_src emacs-lisp
   (use-package flycheck)
   (use-package yasnippet)
 #+end_src
-* Shell On Emacs
-** vterm
-#+begin_src emacs-lisp
-  (use-package vterm
-    :commands vterm
-    :config
-    (setq vterm-max-scrollback 10000)
-    (setq vterm-toggle-fullscreen-p nil))
-#+end_src
-
-Making it so vterm shows up at the bottom of the screen, regardless of how many windows are being used.  
-#+begin_src emacs-lisp
-  (add-to-list 'display-buffer-alist
-               '((lambda(bufname _) (with-current-buffer bufname (equal major-mode 'vterm-mode)))
-                 (display-buffer-reuse-window display-buffer-at-bottom)
-                 ;;(display-buffer-reuse-window display-buffer-in-direction)
-                 ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-                 ;;(direction . bottom)
-                 (dedicated . t) ;; The buffer is dedicated to only vterm, supported in emacs27
-                 (reusable-frames . visible)
-                 (window-height . 0.25)))
-#+end_src
-
 * Key Bindings
 ** Which-Key
 #+begin_src emacs-lisp
@@ -154,28 +133,11 @@ Moving between windows
 - Move to left window, use: =C-c <left>=
 - Move to right window, use: =C-c <right>=
 * Theme
-** Spacemacs-dark theme
+** Nord-theme
 The spacemacs theme is inside of the custom set variables. I might move the custom-sets to a custom file in the future.
 #+begin_src emacs-lisp
-  (custom-set-variables
-   ;; custom-set-variables was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   '(custom-enabled-themes (quote (spacemacs-dark)))
-   '(custom-safe-themes
-     (quote
-      ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default)))
-   '(package-selected-packages
-     (quote
-      (visual-fill-column org-bullets lsp-mode highlight-indent-guides s pyvenv highlight-indentation elpy treemacs helm yasnippet dap-mode lsp-ui flycheck which-key lsp-java company-emacs-eclim eclim company-web company company-irony spacemacs-theme spaceline irony)))
-   '(python-indent-offset 2))
-  (custom-set-faces
-   ;; custom-set-faces was added by Custom.
-   ;; If you edit it by hand, you could mess it up, so be careful.
-   ;; Your init file should contain only one such instance.
-   ;; If there is more than one, they won't work right.
-   )
+   (use-package nord-theme)
+   (load-theme 'nord t)
 #+end_src
 
 * Org Mode
@@ -254,6 +216,7 @@ Puts padding during org-mode.
 Setting up company.
 #+begin_src emacs-lisp
   (use-package company
+    :ensute t
     :config
     (setq company-idle-delay 0)
     (setq company-minimum-prefix-length 3)
@@ -424,18 +387,7 @@ Tide
 #+end_src
 
 * Mode Line
-** Doom Modeline
-#+begin_src emacs-lisp
-  (use-package all-the-icons)
-  (use-package doom-modeline
-    :hook (after-init . doom-modeline-mode)
-    :config
-    (setq doom-modeline-buffer-file-name-style 'file-name)
-    (setq inhibit-compacting-font-caches t))
-#+end_src
-
 ** Spaceline
-I'm currently using doom modeline but spaceline is here incase I want to revert back to it.
 #+begin_src emacs-lisp
   (use-package spaceline
     :config
