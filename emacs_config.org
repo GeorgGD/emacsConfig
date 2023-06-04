@@ -194,13 +194,12 @@ Use bullet characters instead of asterisks.
 ** Padding
 Puts padding during org-mode.
 #+begin_src emacs-lisp
-  (defun gd/org-mode-visual-fill ()
-    (setq visual-fill-column-width 120
-          visual-fill-column-center-text t)
-    (visual-fill-column-mode 1))
-  
-  (use-package visual-fill-column
+ (use-package visual-fill-column
     :hook (org-mode . gd/org-mode-visual-fill))
+ 
+ (defun gd/org-mode-visual-fill ()
+    (setq visual-fill-column-width 140)
+    (visual-fill-column-mode 1)) 
 #+end_src
 
 ** Structure Templates
@@ -420,7 +419,3 @@ Hide minor modes from the modeline by using the diminish package.
       (diminish 'flycheck-mode)
       (diminish 'eldoc-mode))
 #+end_src
-
-
-
-
