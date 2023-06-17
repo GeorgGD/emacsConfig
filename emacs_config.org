@@ -16,7 +16,7 @@
   - [[#global-key-bindings][Global Key Bindings]]
   - [[#handy-shortcuts][Handy Shortcuts]]
 - [[#theme][Theme]]
-  - [[#nord-theme][Nord-theme]]
+  - [[#doom-theme][Doom-theme]]
 - [[#org-mode][Org Mode]]
   - [[#org-configuration][Org Configuration]]
   - [[#update-table-of-contents][Update Table of Contents]]
@@ -74,19 +74,18 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
 * Package Management
 Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
 #+begin_src emacs-lisp
-(package-initialize)
+
+  (setq 
+  package-enable-at-startup nil
+  package-archives '(("melpa" . "https://melpa.org/packages/")
+  ("org" . "https://orgmode.org/elpa/")
+  ("elpa" . "https://elpa.gnu.org/packages/")))
   
-(setq 
-package-enable-at-startup nil
-package-archives '(("melpa" . "https://melpa.org/packages/")
-("org" . "https://orgmode.org/elpa/")
-("elpa" . "https://elpa.gnu.org/packages/")))
-  
-(eval-when-compile
-(require 'package)
-(package-initialize t))
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+  (eval-when-compile
+  (require 'package)
+  (package-initialize t))
+  (require 'use-package-ensure)
+  (setq use-package-always-ensure t)
 #+end_src
 ** Install Packages
 This section is meant for downloading the packages that aren't being costumized but are being used in this config,
@@ -134,11 +133,12 @@ Moving between windows
 - Move to left window, use: =C-c <left>=
 - Move to right window, use: =C-c <right>=
 * Theme
-** Nord-theme
-The spacemacs theme is inside of the custom set variables. I might move the custom-sets to a custom file in the future.
+** Doom-theme
 #+begin_src emacs-lisp
-   (use-package nord-theme)
-   (load-theme 'nord t)
+  (use-package doom-themes
+    :ensure t
+    :config
+    (load-theme 'doom-one t))
 #+end_src
 
 * Org Mode
@@ -216,7 +216,7 @@ Puts padding during org-mode.
 Setting up company.
 #+begin_src emacs-lisp
   (use-package company
-    :ensute t
+    :ensure t
     :config
     (setq company-idle-delay 0)
     (setq company-minimum-prefix-length 3)
@@ -399,8 +399,7 @@ Tide
   (use-package spaceline
     :config
     (require 'spaceline-config)
-    ;(spaceline-emacs-theme)
-    )  
+    (spaceline-emacs-theme))
 #+end_src
 
 ** Enable Mode Diminishing
