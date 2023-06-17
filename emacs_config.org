@@ -76,7 +76,6 @@ Removes the startup screen, the tool-bar, menu-bar and sets font to Ubuntu Mono-
 * Package Management
 Set up ELPA, MELPA, and Org package repositories and load =use-package= to manage package configuration.
 #+begin_src emacs-lisp
-
   (setq
    package-enable-at-startup nil
    package-archives '(("melpa" . "https://melpa.org/packages/")
@@ -183,13 +182,23 @@ Set up Org Mode with a basic configuration.
     (visual-line-mode 1)
     (linum-mode 0))
 
+  (defun org-hide-src-block-delimiters()
+    (interactive)
+    (save-excursion (goto-char (point-max))
+                    (while (re-search-backward "#\\+BEGIN_SRC\\|#\\+END_SRC" nil t)
+                      (let ((ov (make-overlay (line-beginning-position)
+                                              (1+ (line-end-position)))))
+                        (overlay-put ov 'invisible t)))))
+
   (use-package org
     :hook
-    (org-mode . gd/org-mode-setup)  
+    (org-mode . gd/org-mode-setup)
+    (org-mode . org-hide-src-block-delimiters)
     :config
-    (setq org-ellipsis " ...")
+    (setq org-ellipsis " ..."
+          org-hide-emphasis-markers t)
     (setq org-startup-folded t)
-
+    (set-face-attribute 'org-table nil :inherit 'fixed-pitch) ;; Ensures that table rows are alignst
     ;; Disables <> auto pairing in electric mode with org-mode
     (add-hook 'org-mode-hook (lambda ()
                                (setq-local electric-pair-inhibit-predicate
@@ -212,7 +221,7 @@ Use bullet characters instead of asterisks.
     :hook (org-mode . org-bullets-mode)
     :custom
     (org-superstar-remove-leading-stars t)
-    (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+    (org-bullets-bullet-list '(" ")))
 
   ;; Replace list pyphen with dot
   (font-lock-add-keywords 'org-mode
