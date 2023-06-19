@@ -27,6 +27,7 @@
   - [[#bullets][Bullets]]
   - [[#padding][Padding]]
   - [[#structure-templates][Structure Templates]]
+  - [[#spell-checking][Spell checking]]
 - [[#company][Company]]
 - [[#helm][Helm]]
 - [[#treemacs][Treemacs]]
@@ -194,6 +195,7 @@ Set up Org Mode with a basic configuration.
     :hook
     (org-mode . gd/org-mode-setup)
     (org-mode . org-hide-src-block-delimiters)
+    (org-mode . flyspell-mode)
     :config
     (setq org-ellipsis " ..."
           org-hide-emphasis-markers t)
@@ -250,6 +252,24 @@ Puts padding during org-mode.
   (add-to-list 'org-structure-template-alist '("jv" . "src java"))
   (add-to-list 'org-structure-template-alist '("js" . "src javascript"))
   (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+#+end_src
+
+
+
+** Spell checking
+Spell chekcing on Windows is done using hunspell
+#+begin_src emacs-lisp
+(use-package ispell
+  :config
+    (setq ispell-program-name "C:\\Program Files\\hunspell\\bin\\hunspell.exe")
+    (setq ispell-local-dictionary "en_GB")
+    (setq ispell-local-dictionary-alist
+            '(("en_GB" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_GB") nil utf-8)))
+
+    ;; new variable `ispell-hunspell-dictionary-alist' is defined in Emacs
+    ;; If it's nil, Emacs tries to automatically set up the dictionaries.
+    (when (boundp 'ispell-hunspell-dictionary-alist)
+          (setq ispell-hunspell-dictionary-alist ispell-local-dictionary-alist)))
 #+end_src
 
 * Company
