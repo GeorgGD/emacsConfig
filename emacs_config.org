@@ -135,6 +135,7 @@ Moving between windows
 - Move to down window, use: =C-c <down>=
 - Move to left window, use: =C-c <left>=
 - Move to right window, use: =C-c <right>=
+- Find the definition of functions with: =C-c f=
 * Themes and Appearance
 ** Theme
 *** Doom-theme
@@ -329,6 +330,7 @@ Helm is used to improve directory navigation.
     :bind
     ("M-RET" . lsp-execute-code-action)
     ("C-c l" . lsp-keymap-prefix)
+    ("C-c f" . lsp-find-definition)
     :config
     (setq lsp-headerline-breadcrumb-enable nil))
 #+end_src
