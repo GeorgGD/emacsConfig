@@ -184,18 +184,9 @@ Set up Org Mode with a basic configuration.
     (visual-line-mode 1)
     (linum-mode 0))
 
-  (defun org-hide-src-block-delimiters()
-    (interactive)
-    (save-excursion (goto-char (point-max))
-                    (while (re-search-backward "#\\+BEGIN_SRC\\|#\\+END_SRC" nil t)
-                      (let ((ov (make-overlay (line-beginning-position)
-                                              (1+ (line-end-position)))))
-                        (overlay-put ov 'invisible t)))))
-
   (use-package org
     :hook
     (org-mode . gd/org-mode-setup)
-    (org-mode . org-hide-src-block-delimiters)
     (org-mode . flyspell-mode)
     :config
     (setq org-ellipsis " ..."
