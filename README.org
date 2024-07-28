@@ -1,12 +1,5 @@
-* My default settings for emacs
-The following repository contains my personal emacs configuration. 
-
-Currently I'm attempting to turn emacs into a Java IDE and a Python IDE. 
-
-In the future I will also be adding mySQL support to this config file but for now this will do.
-
-** What you will need to download
-if you dont have any of these make sure to download them or company will
+* What you will need to download
+if you don' have any of these make sure to download them or "company" will
 not run as intended.
 - clang :: sudo apt install clang
 - cmake :: sudo apt install cmake
@@ -17,17 +10,9 @@ For autocompletion in Python 3 you will need:
 - jedi :: sudo pip3 install jedi
 - rope :: sudo pip3 install rope
 
-All the packages are being downloaded by using =use-package=.
+All the packages are being downloaded with =use-package=.
 
 Because I'm currently using doom-modeline you will need to install the fonts from the package =all-the-icons= 
 #+begin_src emacs-lisp
   M-x all-the-icons-install-fonts
 #+end_src
-
-Constructive feedback is always welcome!
-
-* TODO's
-- Complete the Python language support.
-- Fix doom modeline bug were it first horizontal splits before showing "find file".
-- Complete the HTML language support.
-- Improve startup performance.
