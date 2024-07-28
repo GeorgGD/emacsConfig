@@ -38,6 +38,9 @@
 - [[#treesitter][Treesitter]]
 - [[#development][Development]]
   - [[#git][Git]]
+  - [[#formatting][Formatting]]
+    - [[#prettier][Prettier]]
+    - [[#apheleia][Apheleia]]
   - [[#languages][Languages]]
     - [[#cc][C/C++]]
     - [[#html][HTML]]
@@ -341,6 +344,8 @@ Helm is used to improve directory navigation.
           lsp-keep-workspace-alive nil ; Close LSP server if all project buffers are closed
           lsp-idle-delay 0.5                  ; Debounce timer for `after-change-function'
 
+          lsp-enable-indentation nil ; Use Prettier
+          lsp-enable-on-type-formatting nil ;Let Prettier handle this 
           lsp-eldoc-enable-hover t            ; Display signature information in the echo area
           ;; modeline
           lsp-modeline-code-actions-enable nil ; Modeline should be relatively clean
@@ -437,6 +442,29 @@ Helm is used to improve directory navigation.
 
 * Development
 ** Git
+** Formatting
+*** Prettier
+#+begin_src emacs-lisp
+  (use-package prettier
+    :ensure t)
+#+end_src
+
+*** Apheleia
+#+begin_src emacs-lisp
+  (use-package apheleia
+    :ensure apheleia
+    :diminish ""
+    :defines
+    apheleia-formatters
+    apheleia-mode-alist
+    :functions
+    apheleia-global-mode
+    :config
+    (setq apheleia-formatters-respect-indent-level nil)
+    (setf (alist-get 'prettier-json apheleia-formatters)
+          '("prettier" "--stdin-filepath" filepath))
+    (apheleia-global-mode +1))
+#+end_src
 ** Languages
 *** C/C++
 Uses =irony-mode= together with =libclang= to provide code completion. You will need to have =clang=, =cmake= and =libclang= in your system to use the code completion!
